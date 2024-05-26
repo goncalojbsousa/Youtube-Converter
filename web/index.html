@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Audio Downloader</title>
+    <title>YouTube Download MP3</title>
     <style>
         body {
             display: flex;
@@ -12,53 +12,75 @@
             min-height: 100vh;
             margin: 0;
             background-image: url('public/background.jpg');
-            /* Define a imagem de fundo */
             background-size: cover;
-            /* Faz com que a imagem cubra todo o corpo */
             background-position: center;
-            /* Centraliza a imagem no corpo */
             background-repeat: no-repeat;
-            /* Evita a repetição da imagem */
             color: white;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Remover barras de rolagem */
+            overflow: hidden;
         }
 
         .container {
             text-align: center;
-            flex-grow: 1; /* Ocupa todo o espaço disponível na vertical */
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        /* Estilo para o input de URL */
+        form {
+            display: flex;
+            align-items: center;
+        }
+
         input[type="text"] {
-            padding: 10px;
-            border: 2px solid #ccc;
+            padding: 12px;
+            border: none;
             border-radius: 5px;
-            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 18px;
             width: 300px;
-            margin-bottom: 10px;
+            margin-right: 10px;
+            border-bottom: 2px solid transparent;
+            transition: background-color 0.3s, border-bottom 0.3s;
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.85);
+            opacity: 1;
+        }
+
+        input[type="text"]:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-bottom: 2px solid #ff0000;
             outline: none;
         }
 
-        /* Estilo para o botão de download */
         button[type="submit"] {
             background-color: #ff0000;
             color: white;
-            padding: 12px 20px;
+            padding: 12px;
+            width: 48px; /* Adjust the width */
+            height: 48px; /* Adjust the height */
             border: none;
-            border-radius: 5px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Estilo para o botão de download ao passar o mouse */
         button[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #ff0000;
+            transform: scale(1.05);
+        }
+
+        button[type="submit"] img {
+            width: 24px;
+            height: 24px;
         }
 
         .social-icons {
@@ -67,30 +89,30 @@
 
         .social-icons img {
             width: 30px;
-            /* Ajuste o tamanho conforme necessário */
             height: auto;
             margin-right: 10px;
             cursor: pointer;
         }
 
-        /* Estilo para o rodapé */
         footer {
             text-align: center;
             padding: 10px;
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
             width: 100%;
-            box-sizing: border-box; /* Inclui padding e borda na largura total */
+            box-sizing: border-box;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>YouTube Music Downloader</h1>
+        <h1>YouTube Download MP3</h1>
         <form action="/download" method="get">
             <input type="text" name="url" placeholder="Enter YouTube URL" required>
-            <button type="submit">Download</button>
+            <button type="submit">
+                <img src="public/download.svg" alt="Download">
+            </button>
         </form>
 
         <div class="social-icons">
