@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Audio Downloader</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('public/background.jpg');
+            /* Define a imagem de fundo */
+            background-size: cover;
+            /* Faz com que a imagem cubra todo o corpo */
+            background-position: center;
+            /* Centraliza a imagem no corpo */
+            background-repeat: no-repeat;
+            /* Evita a repetição da imagem */
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Remover barras de rolagem */
+        }
+
+        .container {
+            text-align: center;
+            flex-grow: 1; /* Ocupa todo o espaço disponível na vertical */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo para o input de URL */
+        input[type="text"] {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 300px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        /* Estilo para o botão de download */
+        button[type="submit"] {
+            background-color: #ff0000;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        /* Estilo para o botão de download ao passar o mouse */
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons img {
+            width: 30px;
+            /* Ajuste o tamanho conforme necessário */
+            height: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        /* Estilo para o rodapé */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 100%;
+            box-sizing: border-box; /* Inclui padding e borda na largura total */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>YouTube Music Downloader</h1>
+        <form action="/download" method="get">
+            <input type="text" name="url" placeholder="Enter YouTube URL" required>
+            <button type="submit">Download</button>
+        </form>
+
+        <div class="social-icons">
+            <a href="www.google.com">
+                <img src="/public/icons/github_white.svg" alt="Github">
+            </a>
+            <a href="www.google.com">
+                <img src="/public/icons/x_white.svg" alt="X aka Twitter">
+            </a>
+            <a href="www.google.com">
+                <img src="/public/icons/reddit_white.svg" alt="Reddit">
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed by Gonçalo Sousa</p>
+    </footer>
+
+</body>
+
+</html>
