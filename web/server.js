@@ -6,6 +6,8 @@ const app = express();
 const PORT = 3000;
 
 app.use('/public', express.static(__dirname + '/../public'));
+app.use('/styles', express.static(__dirname + '/../styles'));
+
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
