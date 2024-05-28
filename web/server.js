@@ -13,13 +13,15 @@ app.get('/', (req, res) => {
 
 app.get('/download', async (req, res) => {
     const url = req.query.url;
+    const formatType = req.query.format; // Obter o formato (áudio ou vídeo)
+
     if (!url) {
-        return res.status(400).send('URL is required');
+        return res.status(400).json({ error: 'URL is required' });
     }
 
     try {
         const info = await ytdl.getInfo(url);
-        const format = ytdl.chooseFormat(info.formats, { filter: 'audioonly', quality: 'highestaudio' });
+        const format = ytdl.chooseFormat(info.formats, { filter: formatType === 'audio' ? 'audioonly' : 'videoandaudio', quality: 'highestaudio' });
 
         // Remover emojis do título do vídeo
         const cleanTitle = emojiStrip(info.videoDetails.title);
@@ -27,7 +29,7 @@ app.get('/download', async (req, res) => {
         // Limpar o título do vídeo para remover outros caracteres inválidos
         const sanitizedTitle = sanitize(cleanTitle);
 
-        res.setHeader('Content-Disposition', `attachment; filename="${sanitizedTitle}.mp3"`);
+        res.setHeader('Content-Disposition', `attachment; filename="${sanitizedTitle}.${formatType === 'audio' ? 'mp3' : 'mp4'}"`);
 
         ytdl(url, { format: format })
             .pipe(res)
@@ -40,7 +42,7 @@ app.get('/download', async (req, res) => {
             });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error processing request');
+        res.status(500).json({ error: 'Error processing request' });
     }
 });
 

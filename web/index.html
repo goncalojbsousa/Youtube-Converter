@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Download MP3</title>
+    <title>YouTube Converter</title>
     <link rel="icon" href="public/download.svg" type="image/x-icon">
     <style>
         body {
@@ -12,7 +12,7 @@
             flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            background-image: url('public/background.jpg');
+            background-image: url('public/background.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -59,12 +59,44 @@
             outline: none;
         }
 
+        select {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 18px;
+            margin-right: 10px;
+            border-bottom: 2px solid transparent;
+            transition: background-color 0.3s, border-bottom 0.3s;
+            outline: none;
+        }
+
+        select:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-bottom: 2px solid #ff0000;
+        }
+
+        /* Estilo para as opções dentro do select */
+        select option {
+            background-color: rgba(0, 0, 0, 0.8);
+            /* Cor de fundo das opções */
+            color: white;
+            /* Cor do texto das opções */
+        }
+
+        /* Estilo para as opções quando selecionadas */
+        select option:checked {
+            background-color: #ff0000;
+            /* Cor de fundo das opções selecionadas */
+        }
+
         button[type="submit"] {
             background-color: #ff0000;
             color: white;
             padding: 12px;
-            width: 48px; /* Adjust the width */
-            height: 48px; /* Adjust the height */
+            width: 48px;
+            height: 48px;
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -98,24 +130,57 @@
         footer {
             text-align: center;
             padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
             color: white;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .error-message {
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: slideDown 0.5s ease forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                top: -50px;
+                opacity: 0;
+            }
+
+            100% {
+                top: 20px;
+                opacity: 1;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>YouTube Download MP3</h1>
-        <form action="/download" method="get">
+        <h1>Open Source YouTube Converter</h1>
+        <form id="download-form">
             <input type="text" name="url" placeholder="Enter YouTube URL" required>
+            <select name="format">
+                <option value="audio">MP3</option>
+                <option value="video">MP4</option>
+            </select>
             <button type="submit">
                 <img src="public/download.svg" alt="Download">
             </button>
         </form>
+        <div id="error-message" class="error-message"></div>
+    </div>
 
+    <footer>
         <div class="social-icons">
             <a href="https://github.com/goncalojbsousa/Youtube-MP3-Downloader">
                 <img src="/public/icons/github_white.svg" alt="Github">
@@ -127,12 +192,61 @@
                 <img src="/public/icons/reddit_white.svg" alt="Reddit">
             </a>
         </div>
-    </div>
-
-    <footer>
         <p>Developed by Gonçalo Sousa</p>
     </footer>
 
+    <script>
+        document.getElementById('download-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const url = document.querySelector('input[name="url"]').value;
+            const format = document.querySelector('select[name="format"]').value;
+            const errorMessageDiv = document.getElementById('error-message');
+            errorMessageDiv.style.display = 'none'; // Hide previous error message
+
+            // Expressão regular para verificar se o URL é um link do YouTube
+            const youtubeRegex = /^(https?:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$/;
+
+            if (!youtubeRegex.test(url)) {
+                errorMessageDiv.textContent = 'Please enter a valid YouTube URL';
+                errorMessageDiv.style.display = 'block';
+                errorMessageDiv.classList.add('slideDown');
+                setTimeout(() => {
+                    errorMessageDiv.style.display = 'none';
+                    errorMessageDiv.classList.remove('slideDown');
+                }, 5000);
+                return;
+            }
+
+            try {
+                const response = await fetch(`/download?url=${encodeURIComponent(url)}&format=${format}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    errorMessageDiv.textContent = errorData.error;
+                    errorMessageDiv.style.display = 'block';
+                    errorMessageDiv.classList.add('slideDown');
+                    setTimeout(() => {
+                        errorMessageDiv.style.display = 'none';
+                        errorMessageDiv.classList.remove('slideDown');
+                    }, 5000);
+                } else {
+                    const blob = await response.blob();
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = response.headers.get('Content-Disposition').split('filename=')[1].replace(/"/g, '');
+                    link.click();
+                }
+            } catch (error) {
+                errorMessageDiv.textContent = 'An unexpected error occurred';
+                errorMessageDiv.style.display = 'block';
+                errorMessageDiv.classList.add('slideDown');
+                setTimeout(() => {
+                    errorMessageDiv.style.display = 'none';
+                    errorMessageDiv.classList.remove('slideDown');
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 
 </html>
